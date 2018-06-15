@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title></title>
+	<style type="text/css">
+		*{
+			font-family: '微软雅黑';
+		}
+		label{
+			display: inline-block;
+			width: 100px;
+			text-align: right;
+			margin-right: 10px;
+		}
+        #showCode{
+        	border: 1px solid gray;
+        	padding: 5px 5px;
+        	width: 80px;
+        	background: pink;
+        	font-family: 'Verdana';
+            font-style: italic;
+            color: blue;
+        }
+        input{
+        	border: 1px solid gray;
+            padding: 5px 10px;
+        }
+        #getCode{
+        	padding: 5px 5px;
+        	border: 1px solid gray;
+        }
+        .warnMessage{
+        	color: red;
+        }
+	</style>
+</head>
+<body>
+	   <p>
+		   	<label>
+		   	   手机号
+		   	</label>
+		   	<input type="text" name="phone" placeholder="请输入手机号">
+		   	<span class="warnMessage warnPhone"></span>
+	   </p>
+	   	<p>
+	   		<label>
+		   		图形验证码
+	   	    </label>
+   	    	<input type="text" name="checkCode" placeholder="请输入图形验证码">
+	   		<button id="showCode" disabled="true"></button>
+	   		<span id="change">看不清，换一个</span>
+	   		<span class="warnMessage warnCode1"></span>
+	   	</p>
+	   	<p>
+		   	<label>
+		   		短信验证码
+		   	</label>
+		   	<input type="text" name="checkMessage" placeholder="请输入短信验证码">
+	   		<button id="getCode">获取验证码</button>
+	   		<span class="warnMessage warnCode2"></span>
+	   	</p>
+ 
+   <script type="text/javascript" src="https://cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
+   <script type="text/javascript">
+   	  var testPhone = /^1[3|4|5|7|8][0-9]{9}$/;
+   	  var chars = ['0','1','2','3','4','5','6','7','8','9','A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z','a','b','c','d','e','f','g','h','i','j','k','m','l','n','o','p','q','r','s','t','u','v','w','x','y','z'];
+   	  var time = '';
+   	  var num = 60;
+   	  console.log($('input[name="phone"]'))
+   	 $('input[name="phone"]').blur(function(){
+   	  	var phone = $('input[name="phone"]').val();
+   	  	console.log(phone)
+   	  	if(phone == ''){
+   	  		$('.warnPhone').text('请输入手机号')
+   	  	}else{
+	   	  	  if(testPhone.test(phone)==true){
+		         $('.warnPhone').text('')
+		   	  }else{
+		   	  	 $('.warnPhone').text('请输入正确的11位手机号码！')
+		   	  }
+   	  	}
+	   	  
+   	  })
+   	  $('input[name="phone"]').focus(function(){
+   	  	$('.warnPhone').text('')
+   	  })
+   	  function change(){
+   	  	 var res = '';
+	   	  for(var i=0;i<4;i++){
+	   	  	var random = Math.ceil(Math.random()*60);
+	   	  	res += chars[random];
+	   	  }
+	   	  $('#showCode').text(res)
+   	  }
+   	  change()
+   	  $('#change').click(function(){
+   	  	change()
+   	  })
+   	  $('input[name="checkCode"]').blur(function(){
+   	  	var code = $('#showCode').text();
+   	  	console.log(code)
+   	  	var inputCode = $('input[name="checkCode"]').val();
+   	  	console.log(inputCode)
+   	  	if(inputCode == ''){
+   	  		$('.warnCode1').text('请输入图形验证码')
+   	  	}else{
+   	  		 if(code.toLowerCase()!=inputCode.toLowerCase()){
+   	  		   $('.warnCode1').text('验证码输入不正确！')
+	   	  	 }else{
+               $('.warnCode1').text('')
+	   	  	 }
+   	  	}
+   	  
+   	  })
+   	  $('input[name="checkCode"]').focus(function(){
+   	  	$('.warnCode1').text('')
+   	  })
+
+   	  $('#getCode').click(function(){
+   	  	$('#getCode').attr('disabled',true);
+   	  	$('#getCode').text('重新获取('+num+'s)')
+   	  	time = setInterval(function(){
+   	  		num--;
+           if(num>0){
+             $('#getCode').text('重新获取('+num+'s)')
+           }else{
+           	clearInterval(time);
+           	$('#getCode').attr('disabled',false);
+           	$('#getCode').text('获取验证码');
+           	num = 60;
+           }
+   	  	},1000);
+   	  })
+	  $('input[name="checkMessage"]').blur(function(){
+	   	  	 if($('input[name="checkMessage"]').val() == ''){
+	   	  	    $('.warnCode2').text('请输入短信验证码')
+	   	     }
+	   	  })
+	  $('input[name="checkMessage"]').focus(function(){
+           $('.warnCode2').text('')
+	   	 })
+
+	  // $(document).keydown(function(e){
+	  // 	if(e.keyCode == 13){
+	  // 		$('input').each((item) =>{
+	  // 			if($(this).focus()){
+	  // 				$(this).next().focus()
+	  // 			}
+	  // 		})
+	  // 	}
+	  // })
+
+	    function strrepeat(str,num){
+            var arr = new Array(num+1);
+            console.dir(arr.join())
+		    return  arr.join(str);
+
+		}
+
+		console.log(strrepeat("hello",3))
+		var str = ' abcde ';
+		var str1 = $.trim(str);
+		console.log(str1)
+
+		    var arr=[[1,2],[3,4],[4,5],[6,7,8,9]];
+			function Jw(obj){
+			     return Array.prototype.concat.apply([],obj);
+			}
+			console.log(Jw(arr));
+
+
+			function getQueryObject(url) {
+			    url = url == null ? window.location.href : url;
+			    var search = url.substring(url.lastIndexOf("?") + 1);
+			    var obj = {};
+			    var reg = /([^?&=]+)=([^?&=]*)/g;
+			    search.replace(reg, function (rs, $1, $2) {
+			        var name = decodeURIComponent($1);
+			        var val = decodeURIComponent($2);                
+			        val = String(val);
+			        obj[name] = val;
+			        return rs;
+			    });
+			    return obj;
+			}
+
+			console.log(getQueryObject('https://www.cnblogs.com/weven/p/7236111.html'))
+
+
+
+			function log(argu){
+				console.log(arguments);
+				arr = Array.prototype.slice.call(arguments)
+				console.log(arr)
+			}
+			log(1,2,3,4)
+   </script>
+</body>
+</html>

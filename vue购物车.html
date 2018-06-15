@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Vue购物车体验</title>
+    <style>
+        * {
+            font-family: '微软雅黑'
+        }
+
+        #container {
+            display: flex;
+            flex-direction: column;
+        }
+
+        #container .shop {
+            width: 800px;
+            margin: 10px auto;
+        }
+
+        #container .shop .shopName {
+            color: red;
+            font-size: 14px;
+        }
+
+        #container .shop table {
+            border: 1px solid gray;
+            border-collapse: collapse;
+            width: 100%;
+            text-align: center;
+        }
+
+        #container .shop table th {
+            border: 1px solid gray;
+            background: lightskyblue;
+        }
+
+        #container .shop table td {
+            border: 1px solid gray;
+            font-size: 14px;
+        }
+
+        #container .shop table td input[type='text'] {
+            width: 30px;
+        }
+
+        #container .checkAll .totalPrice,
+        .caculate {
+            float: right;
+        }
+
+        #container .checkAll .caculate {
+            text-align: center;
+            width: 100px;
+            background: orangered;
+        }
+
+        #container .checkAll .totalPrice {
+            width: 100px;
+            text-align: right;
+            margin-right: 50px;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="container">
+        <div v-if="goodsObj.length">
+            <div class="shop" v-for="(item,index) in goodsObj">
+                <span v-html="item.name" class="shopName"></span>
+                <input type="checkbox" name="everyShop" @click="selectEveryShop(index)" :checked="item.checked">
+                <label for="everyShop">全选</label>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>选择</th>
+                            <th>商品</th>
+                            <th>单价</th>
+                            <th>运费</th>
+                            <th>数量</th>
+                            <th>操作</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr v-for="(good,index1) in item.list">
+                            <td>
+                                <input type="checkbox" :checked="good.checked" @click="choose(index,index1)">
+                            </td>
+                            <td>{{good.name}}</td>
+                            <td>{{good.price}}</td>
+                            <td>{{good.fare}}</td>
+                            <td>
+                                <button @click="reduce(index,index1,-1)" :disabled="good.disabled">-</button>
+                                <input type="text" v-model="good.num">
+                                <button @click="add(index,index1,1)">+</button>
+                            </td>
+                            <td>
+                                <button @click="del(index,index1)">删除</button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                <p>店铺总运费：
+                    <span v-html="shopTotalFare(index)"></span>
+                </p>
+                <p>店铺商品总价格：
+                    <span v-html="shopTotalPrice(index)"></span>
+                </p>
+            </div>
+            <div class="checkAll shop">
+                <input type="checkbox" :checked="allChecked" @click="chooesAllGoods()">
+                <label for="">全选</label>
+                <p class="caculate">结算
+                    <span v-html="totalNums()"></span>
+                </p>
+                <p class="totalPrice">合计
+                    <span v-html="totalPrice()"></span>
+                </p>
+            </div>
+        </div>
+        <div v-else>{{message}}</div>
+    </div>
+
+    </div>
+    <script src="https://cdn.bootcss.com/vue/2.5.9/vue.js"></script>
+    <script>
+        var goodsObj = [
+            {
+                name: '陈宝东专业美白',
+                checked: false,
+                list: [
+                    {
+                        name: '玻尿酸',
+                        price: 23.00,
+                        realStock: 10,
+                        fare: 1.5,
+                        num: 1,
+                        checked: false,
+                        disabled: false,
+                    },
+
+                    {
+                        name: '补水面膜',
+                        price: 21.00,
+                        realStock: 2,
+                        fare: 1.5,
+                        num: 2,
+                        checked: false,
+                        disabled: false,
+                    },
+
+                    {
+                        name: '护肤精华露',
+                        price: 88.00,
+                        realStock: 8,
+                        fare: 1.5,
+                        num: 4,
+                        checked: false,
+                        disabled: false,
+                    }
+                ]
+            },
+
+            {
+                name: '龙泉宝剑专卖店',
+                checked: false,
+                list: [
+                    {
+                        name: '花纹钢汉剑',
+                        price: 266.00,
+                        realStock: 10,
+                        fare: 2,
+                        num: 1,
+                        checked: false,
+                        disabled: false,
+                    },
+
+                    {
+                        name: '花纹钢唐剑',
+                        price: 188.00,
+                        realStock: 2,
+                        fare: 1.5,
+                        num: 2,
+                        checked: false,
+                        disabled: false,
+                    },
+
+                    {
+                        name: '赤壁剑',
+                        price: 299.00,
+                        realStock: 1,
+                        fare: 3,
+                        num: 1,
+                        checked: false,
+                        disabled: false,
+                    }
+                ]
+            },
+
+            {
+                name: '卫龙专卖店',
+                checked: false,
+                list: [
+                    {
+                        name: '变态辣',
+                        price: 3.00,
+                        realStock: 10,
+                        fare: .5,
+                        num: 10,
+                        checked: false,
+                        disabled: false,
+                    },
+
+                    {
+                        name: '精品卫龙',
+                        price: 1.50,
+                        realStock: 2,
+                        fare: 2,
+                        num: 2,
+                        checked: false,
+                        disabled: false,
+                    },
+
+                    {
+                        name: '辣的一笔',
+                        price: 2.50,
+                        realStock: 3,
+                        fare: 5,
+                        num: 2,
+                        checked: false,
+                        disabled: false,
+                    }
+                ]
+            },
+        ];
+        new Vue({
+            el: '#container',
+            data: {
+                goodsObj: goodsObj,
+                totalMoney: 0,
+                totalFare: 0,
+                totalNum: 0,
+                allChecked: false,
+                message: '暂无商品信息'
+            },
+            methods: {
+                chooesAllGoods:function(){
+                    var flag = true;
+                    if(this.allChecked){
+                        flag = false;
+                    }
+                    for(var i=0,len = this.goodsObj.length;i<len;i++){
+                        this.goodsObj[i].checked = flag;
+                        var list = this.goodsObj[i].list;
+                        for(var k = 0,len1=list.length;k<len;k++){
+                            list[k].checked = flag;
+                        }
+                    }
+                    this.allChecked = !this.allChecked;
+                },
+                reduce: function (index, index1, num) {
+                    var good = this.goodsObj[index].list[index1];
+                    good.disabled = false;
+                    if (good.num >= 1) {
+                        good.num += num;
+                    } else {
+                        good.disabled = true;
+                    }
+
+                },
+                add: function (index, index1, num) {
+                    var good = this.goodsObj[index].list[index1];
+                    good.disabled = false;
+                    if (good.num < 20) {
+                        good.num += num;
+                    }
+                },
+                del: function (index, index1) {
+                    this.goodsObj[index].list.splice(index1, 1);
+                    if (this.goodsObj[index].list.length === 0) {
+                        this.goodsObj.splice(index, 1)
+                    }
+                },
+                selectEveryShop: function (index) {
+                    var list = this.goodsObj[index].list;
+                    len = list.length;
+                    if (this.goodsObj[index].checked === true) {
+                        for (var i = 0; i < len; i++) {
+                            list[i].checked = false;
+                        }
+                    } else {
+                        for (var i = 0; i < len; i++) {
+                            list[i].checked = true;
+                        }
+                    }  
+                    this.goodsObj[index]['checked'] = !this.goodsObj[index]['checked'];
+                    this.ischooesAll()
+                },
+                ischooesAll: function () {
+                   var flag1 = true;
+                   for(var i=0,len=this.goodsObj.length;i<len;i++){
+                        if(this.goodsObj[i].checked == false){
+                            flag1 = false;
+                            break;
+                        }
+                   }
+                   flag1 == true? this.allChecked = true:this.allChecked = false;
+                },
+                shopTotalFare: function (index) {
+                    var shopTotalFareMoney = 0;
+                    var list = this.goodsObj[index].list;
+                    list.forEach(function (item, index) {
+                        if (list[index].checked) {
+                            shopTotalFareMoney += parseFloat(item.fare) * parseFloat(item.num);
+                        }
+                    })
+                    return shopTotalFareMoney.toFixed(2);
+                },
+                shopTotalPrice: function (index) {
+                    var shopTotalPriceMoney = 0;
+                    var list = this.goodsObj[index].list;
+                    list.forEach(function (item, index) {
+                        if (list[index].checked) {
+                            shopTotalPriceMoney += parseFloat(item.price) * parseFloat(item.num);
+                        }
+                    })
+                    return shopTotalPriceMoney.toFixed(2)
+                },
+                totalNums: function () {
+                    var oThis = this;
+                    this.totalNum = 0;
+                    for (var i = 0; i < this.goodsObj.length; i++) {
+                        var list = this.goodsObj[i].list;
+                        list.forEach(function (item, index) {
+                            if (list[index].checked) {
+                                oThis.totalNum += item.num;
+                            }
+                        })
+                    }
+                    return this.totalNum;
+                },
+                totalPrice: function () {
+                    var oThis = this;
+                    this.totalMoney = 0;
+                    for (var i = 0, len = this.goodsObj.length; i < len; i++) {
+                        var list = this.goodsObj[i]['list'];
+                        list.forEach(function (item, index) {
+                            if (list[index]['checked']) {
+                                oThis.totalMoney += parseFloat(item.price) * parseFloat(item.num);
+                            }
+                        });
+                    }
+                    return this.totalMoney
+                },
+                choose:function(index,index1){
+                    var list = this.goodsObj[index].list;
+                    len = list.length;
+                    if(list[index1].checked){
+                        this.goodsObj[index].checked = false;
+                        this.allChecked = false;
+                        list[index1].checked = !list[index1].checked;
+                    }else{
+                        list[index1].checked = !list[index1].checked;
+
+                        var flag = true;
+                        for(var i=0;i<len;i++){
+                            if(list[i].checked === false){
+                                flag = false;
+                                break;
+                            }
+                        }
+                        flag==true?this.goodsObj[index].checked = true:this.goodsObj[index].checked = false;
+                    }
+                    this.ischooesAll()
+                }
+            },
+
+        })
+    </script>
+</body>
+
+</html>

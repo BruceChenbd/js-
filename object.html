@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+
+<body>
+        <button data="1">1</button>
+        <button data="2">2</button>
+        <button data="3">3</button>
+        <button data="4">4</button>
+        <button data="5">5</button>
+        <button data="6">6</button>
+
+        <h1>5</h1>
+    <script>
+        //    function Foo(){
+
+        //    }
+        //    Foo.method = function(){
+        //        var that = this;
+        //        console.log(that);
+        //        function test(){
+        //            console.log(that)
+        //        }
+        //        test();
+        //    }
+        //    Foo.method()
+
+        function Foo() { }
+        Foo.prototype.method = function () {
+            console.log(1)
+        };
+
+        function Bar() { }
+        Bar.prototype = Foo.prototype;
+
+        console.log(new Bar().method);
+
+        // for (var i = 0; i < 10; i++) {
+        //   (function(e){
+        //       setTimeout(function(){
+        //           console.log(e)
+        //       },1000)
+        //   })(i)
+        // }
+        
+        // var btns = document.getElementsByTagName('button');
+        // for(var i=0;i<btns.length;i++){
+        //     (function(a){
+        //         console.log(a)
+        //         btns[a].onclick = function(){
+        //             alert(a)
+        //         }
+        //     })(i)
+        // }
+        
+        // var index=5;
+        // setInterval(function(){
+        //     index--;
+        //     if(index<0){
+        //         index=5;
+        //     }
+        //     console.log(index)
+        //     var h1 = document.getElementsByTagName('h1')[0];
+        //     console.log(h1)
+        //     h1.innerHTML = index;
+        // },1000)
+
+
+        
+    </script>
+</body>
+
+</html>

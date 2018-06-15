@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <script src="https://cdn.bootcss.com/jquery/2.2.1/jquery.min.js"></script>
+    <title>模态框</title>
+    <style>
+       #modal-overlay{
+           visibility: hidden;
+           position: absolute;
+           left: 0px;
+           top: 0px;
+           width: 100%;
+           height: 100%;
+           text-align: center;
+           z-index: 1000;
+           background: #333;
+           opacity: 0.5;
+           display: flex;
+           align-items: center;
+           justify-content: center;
+       }
+       .modal-data{
+           opacity: 1;
+           width: 50%;
+           height: 50%;
+           background: #fff;
+           border: 1px solid #000;
+           padding: 15px;
+           text-align: center;
+       }
+       ul{
+           width: 1000px;
+           margin: 0;
+           padding: 0;
+           list-style: none;
+           display: flex;
+           justify-content: space-between;
+       }
+       ul li{
+           width: 30%;
+           height: 300px;
+           border: 1px solid red;
+           margin: 0 20px 0 0;
+           background: url('Desert.jpg') no-repeat;
+           background-position: center center;
+           background-size:100% 100%;
+       }
+       .show{
+           width: 200px;
+           height: 200px;
+           margin-top: 20px;
+           border: 2px solid #333;
+       }
+       .show img{
+           display: inline-block;
+           width: 100%;
+           height: 200px;
+       }
+    </style>
+</head>
+<body>
+    <div id="modal-overlay">
+        <div class="modal-data">
+            <p>这是一个模态框</p>
+            <p><button onclick="overlay()">关闭</button></p>
+        </div>
+    </div>
+    <button onclick="overlay()">显示</button>
+    <ul>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+    </ul>
+    <div class="show">
+        <img src="Desert.jpg" alt="">
+    </div>
+    <div class="bigImg">
+
+    </div>
+    <script>
+        function overlay(){
+            var el = document.getElementById('modal-overlay');
+            el.style.visibility = (el.style.visibility == 'visible')?"hidden":"visible";
+        }
+       $('ul').children().each(function(){
+           $(this).mouseenter(function(e){
+               $(this).css({
+                   "transition":"0.5s",
+                   "background-size":"120% 120%"
+               })
+              
+           }).mouseleave(function(){
+                $(this).css({
+                    "transition":"0.5s",
+                    "background-size":"100% 100%"
+                })
+                $('img').remove('.img')
+            })
+       })
+
+       $('.show').bind('mousemove','mouseover',function(){
+            var intX = window.event.clientX;  
+            var intY = window.event.clientY;  
+           var src = $(this).find('img').prop('src')
+           console.log(src)
+           $('.bigImg').html('<img src="'+src+'" class="img"/>')
+           $('.img').css({
+               "position":"absolute",
+               "left":intX+10+'px',
+               "top":intY+10+'px',
+               "width":"400px",
+               "height":"400px"
+           })
+       }).mouseleave(function(){
+           $('.bigImg').empty()
+       })
+    </script>
+</body>
+</html>

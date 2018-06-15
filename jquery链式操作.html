@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title></title>
+</head>
+<body>
+<script type="text/javascript">
+	// 定义一个js类
+	function Demo(){
+
+	}
+	// 扩展她的prototype
+	Demo.prototype = {
+		setName:function(name){
+			this.name = name;
+			return this;
+		}
+		// getName:function () {
+  //           return this.name;
+  //       },
+	    setAge:function (age) {
+	        this.age = age;
+	        return this;
+	    }
+	}
+	// 工厂函数
+	function D(){
+		return new Demo();
+	}
+	console.log(D().setName('baoge').setAge(18));
+</script>
+</body>
+</html>

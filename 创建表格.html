@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title></title>
+</head>
+<body>
+ <script type="">
+ 	function MyTable(rows,cols){
+       this.createTable = function(){
+       	this.table = document.createElement('table');
+       	this.table.style.border = '2px solid red';
+       	for(var i=0;i<rows;i++){
+       		tr = this.table.insertRow();
+       		for(var j=0;j<cols;j++){
+       			var td = tr.insertCell();
+       			td.style.lineHeight = '50px';
+       			td.style.width = '70px';
+       			td.style.textAlign = 'center';
+       			td.innerHTML =i*j;
+       		}
+       	}
+       }
+       this.createTable();
+
+       this.addIn = function(ele){
+       	ele.appendChild(this.table)
+       }
+ 	}
+
+ 	var tb = new MyTable(9,9);
+ 	tb.addIn(document.body)
+
+ 	function createTable(){
+ 		var table = document.createElement('table');
+ 		table.style.border = '1px solid gray';
+ 		for(var i=1;i<10;i++){
+ 			var tr = table.insertRow();
+ 			for(var j=1;j<i+1;j++){
+               var td = tr.insertCell();
+               td.innerHTML =i+'*'+j+'='+i*j;
+               td.style.lineHeight = '50px';
+               td.style.backgroundColor = 'orange'
+ 			}
+ 		}
+ 		document.body.appendChild(table)
+ 	}
+ 	createTable()
+ </script>
+</body>
+</html>

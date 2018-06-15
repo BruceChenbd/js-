@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
+    <title></title>
+    <style>
+       html, body{
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+         
+        }
+       .container{
+           position: relative;
+           height: 106px;
+           top: 50px;
+        }
+       .message{
+           background: rgb(170, 224, 170);
+           width: 100px;
+           font-family: '微软雅黑';
+           border: 1px solid gray;
+           font-size: 14px;
+           padding: 10px 20px;
+       }
+       .tip{
+           /* display: none; */
+           width: 140px;
+           height: 50px;
+           position: absolute;
+           border-radius: 5px;
+           top: -65px;
+           background: lightblue;
+       }
+       .tip h5{
+           display: flex;
+           justify-content: center;
+           align-items: center;
+           margin: 0;
+           height: 100%;
+       }
+       .tip span{
+           display: inline-block;
+           width: 20px;
+           height: 20px;
+           left: 10px;
+           top: 35px;
+           position: absolute;
+           background: lightblue;
+           transform: rotate(45deg)
+       }
+    </style>
+</head>
+<body>
+        <div class="container">
+            <div class="tip">
+                <h5>Hello</h5>
+                <span></span>
+            </div>
+            <div class="message">
+                    这是我的留言。
+            </div>
+        </div>
+    <script>
+       $('.message').mouseenter(function(){
+           $('.tip').css({
+               "display":"block"
+           })
+       }).mouseleave(function(){
+        $('.tip').css({
+               "display":"none"
+           })
+       })
+       $('tip').mouseenter(function(){
+           $('tip').css({
+               "display":"block"
+           })
+       })
+    </script>
+</body>
+</html>

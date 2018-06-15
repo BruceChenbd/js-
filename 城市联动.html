@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <script src="https://cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
+    <title>城市联动</title>
+</head>
+<body>
+    <select name="province" id="province"></select>
+    <select name="city" id="city"></select>
+    <select name="area" id="area"></select>
+    <div>
+        您的地址是：<span id="address"></span>
+    </div>
+    <script>
+       
+       function getProvince(){
+           var appkey = 'd437f2408ec177ca';
+           $.get('http://api.jisuapi.com/area/province',{appkey},function(res){
+            //   console.log(res);
+              var res = JSON.parse(res);
+              var province = res.result;
+              console.log(res)
+              province.forEach((item) =>{
+                  $('#province').append('<option onclick="getCity('+item.id+')">'+item.name+'</option>')
+              })
+           })
+       }
+       getProvince();
+      function getCity(id){
+          $('#city').empty()
+          console.log(id)
+          var id = JSON.stringify(id)
+          var appkey = 'd437f2408ec177ca';
+          $.get('http://api.jisuapi.com/area/city',{appkey,parentid:id},function(res){
+              console.log(res);
+              var res = JSON.parse(res);
+              var city = res.result;
+              city.forEach((item) =>{
+                  $('#city').append('<option onclick="getArea('+item.id+')">'+item.name+'</option>')
+              })
+          })
+      }
+      getCity(1)
+      function getArea(id){
+          $('#area').empty()
+          console.log(id)
+          var id = JSON.stringify(id)
+          var appkey = 'd437f2408ec177ca';
+          $.get('http://api.jisuapi.com/area/town',{appkey,parentid:id},function(res){
+              console.log(res);
+              var res = JSON.parse(res);
+              var area = res.result;
+              area.forEach((item) =>{
+                  $('#area').append('<option>'+item.name+'</option>');
+              })
+          })
+      }
+      getArea(499)
+    </script>
+</body>
+</html>

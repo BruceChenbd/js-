@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>前端项目常用工具函数</title>
+    <style>
+      div{
+          height: 5000px;
+      }
+      .go-top{
+          width: 100px;
+          height: 50px;
+          background: red;
+          position: fixed;
+          right: 0;
+          bottom: 0;
+      }
+    </style>
+</head>
+
+<body>
+    <div class="go-top">回到顶部</div>
+    <div class="name">
+        hello
+    </div>
+    <button onclick="change()">点我变颜色</button>
+    <script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
+    <script>
+        // 判断两个数组是否相等
+        //    function arrayEqual(arr1,arr2){
+        //        if(arr1 == arr2) return true;
+        //        if(arr1.length != arr2.length) return false;
+        //        for(var i=0;i<arr1.length;++i){
+        //            if(arr1[i] != arr2[i]) return false;
+        //        }
+        //        return true;
+        //    }
+        Array.prototype.equals = function (array) {
+            // if the other array is a falsy value, return
+            if (!array)
+                return false;
+
+            // compare lengths - can save a lot of time 1     
+            if (this.length != array.length) {
+                return false;
+            }
+
+            for (var i = 0, l = this.length; i < l; i++) {
+                // Check if we have nested arrays
+                if (this[i] instanceof Array && array[i] instanceof Array) {
+                    // recurse into the nested arrays
+                    if (!this[i].equals(array[i]))
+                        return false;
+                }
+                else if (this[i] !== array[i]) {
+                    // Warning - two different object instances will never be equal: {x:20} != {x:20}
+                    return false;
+                }
+            }
+            return true;
+        }
+        // var arr1 = [0, 1, 2, 3, 4];
+        // var arr2 = [0, 1, '2', 3, 4];
+        // console.log(arr1.equals(arr2))
+
+        // 判断元素是否有某个class
+        function hasClass(ele, cla) {
+            return (new RegExp('(\\s|^)' + cla + '(\\s|$)')).test(ele.className);
+        }
+        var div = document.getElementsByClassName('name')[0];
+        // console.log(hasClass(div,'header'))
+        // 为元素添加某个class
+        function addClass(ele, cla) {
+            if (!hasClass(ele, cla)) {
+                ele.className += ' ' + cla;
+            }
+        }
+        // addClass(div,'test')
+        // console.log(document.getElementsByClassName('test')[0])
+        // 为元素移除class
+        function removeClass(ele, cla) {
+            if (hasClass(ele, cla)) {
+                var reg = new RegExp('(\\s|^)' + cla + '(\\s|$)');
+                ele.className = ele.className.replace(reg, ' ');
+            }
+        }
+
+        // removeClass(div,'name')
+        // 设置cookie
+        function setCookie(name, value, days) {
+            var date = new Date();
+            console.log(date.getDate() + days)
+            date.setDate(date.getDate() + days);
+            document.cookie = name +'='+ value +';expires='+ date;
+        }
+        // setCookie('baoge', 'hello', 7)
+        // 根据name获取cookie
+    //    console.log(document.cookie)
+        function getCookie(name) {
+            var arr = document.cookie.replace(/\s/g, "").split(';');
+            console.log(arr)
+            for (var i = 0; i < arr.length; i++) {
+                var tempArr = arr[i].split('=');
+                if (tempArr[0] == name) {
+                    return decodeURIComponent(tempArr[1]);
+                }
+            }
+            return '';
+        }
+        // console.log(getCookie('baoge'))
+
+        // 根据name删除cookie
+        function removeCookie(name){
+            setCookie(name,'1',-1)
+        }
+        // removeCookie('baoge')
+        // console.log(document.cookie)
+
+        // 获取浏览器类型和版本
+        function getExplore(){
+            var sys = {};
+            var ua = navigator.userAgent.toLowerCase();
+            var s;
+            (s = ua.match(/rv:([\d.]+)\) like gecko/)) ? sys.ie = s[1]:
+            (s = ua.match(/msie ([\d\.]+)/)) ? sys.ie = s[1]:
+            (s = ua.match(/edge\/([\d\.]+)/)) ? sys.edge = s[1]:
+            (s = ua.match(/firefox\/([\d\.]+)/)) ? sys.firefox = s[1]:
+            (s = ua.match(/(?:opera|opr).([\d\.]+)/)) ? sys.opera = s[1]:
+            (s = ua.match(/chrome\/([\d\.]+)/)) ? sys.chrome = s[1]:
+            (s = ua.match(/version\/([\d\.]+).*safari/)) ? sys.safari = s[1]:0;
+            // 根据关系进行判断
+            if(sys.ie) return ('IE:'+sys.ie)
+            if(sys.edge) return ('EDGE:'+sys.edge)
+            if(sys.firefox) return ('Firefox:'+sys.firefox)
+            if(sys.chrome) return ('Chrome:'+sys.chrome)
+            if(sys.opera) return ('Opera:'+sys.opera)
+            if(sys.safari) return ('Safari:'+sys.safari)
+            return 'Unkonwn'
+        }
+        console.log(getExplore())
+
+        // 获取操作系统
+        function getOs(){
+            var userAgent = 'navigator' in window && 'userAgent' in navigator  && navigator.userAgent.toLowerCase() || '';
+            var vendor = 'navigator' in window && 'vendor' in navigator && navigator.vendor.toLowerCase() || '';
+            var appVersion = 'navigator' in window && 'appVersion' in navigator && navigator.appVersion.toLowerCase() || '';
+            if(/mac/i.test(appVersion)) return 'MacOSX'
+            if(/win/i.test(appVersion)) return 'windows'
+            if(/linux/i.test(appVersion)) return 'linux'
+            if(/iphone/i.test(userAgent) || /ipad/i.test(userAgent) || /ipad/i.test(userAgent)) 'ios'
+            if(/andriod/i.test(userAgent)) return 'android'
+            if(/win/i.test(appVersion) && /phone/i.test(userAgent)) return 'windowsPhone'
+        }
+        console.log(getOs())
+
+        // 获取滚动条距离顶部的距离
+        function getScrollTop(){
+            return (document.documentElement && document.documentElement.scrollTop) || document.body.scrollTop;
+        }
+        console.log(getScrollTop())
+
+        // 获取一个元素的距离文档(document)的位置
+        function offset(ele){
+            var pos = {
+                left:0,
+                top:0
+            };
+            while(ele){
+                pos.left+=ele.offsetLeft;
+                pos.top+=ele.offsetTop;
+                ele = ele.offsetParent;
+            };
+            return pos;
+        }
+        console.log(offset(div))
+        // 设置滚动条距离顶部的距离
+        function setScrollTop(value){
+            window.scrollTo(0,value);
+            return value;
+        }
+        console.log(setScrollTop(1000))
+
+        // 深度拷贝
+        function deepClone(values){
+            var copy;
+            if(null == values || 'object' != typeof values) return values;
+
+            if(values instanceof Date){
+                copy = new Date();
+                copy.setTime(values.getTime());
+                return copy;
+            }
+
+            if(values instanceof Array){
+                copy = [];
+                for(var i=0;i<values.length;i++){
+                    copy[i] = deepClone(values[i]);
+                }
+                return copy;
+            }
+
+            if(values instanceof Object){
+                copy = {};
+                for(var attr in values){
+                    if(values.hasOwnProperty(attr)) copy[attr] = deepClone(values[attr]);
+                }
+                return copy;
+            }
+            throw new Error('Unable to copy values! its type isn"t supported');
+        }
+
+        // console.log(deepClone(div))
+        // 判断obj是否为空
+        function isEmptyObject(obj){
+           if(!obj || typeof obj != 'object' || Array.isArray(obj))
+           return false
+
+           return !Object.keys(obj).length
+        }
+        // var people = {
+         
+        // }
+        // var arr = []
+        // console.log(isEmptyObject(arr))
+
+        // 随机生成颜色
+        
+        function randomColor(){
+            return '#'+('00000'+(Math.random()*0x1000000 << 0).toString(16)).slice(-6);
+        }
+        
+        function change(){
+            document.body.style.backgroundColor = randomColor()
+        }
+
+        // 生成指定范围内的随机数
+        function randomNum(min,max){
+             return Math.floor(min+Math.random()*(max-min));
+        }
+        console.log(randomNum(10,100))
+        // 判断是否为邮箱
+        function isEmail(str){
+            return /\w+([-+.]\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*/.test(str);
+        }
+        // console.log(isEmail('393591669@qq.com'))
+        // 判断是否为身份证号
+        function isIdCard(str){
+            return /^(^[1-9]\d{7}((0\d)|(1[0-2]))(([0|1|2]\d)|3[0-1])\d{3}$)|(^[1-9]\d{5}[1-9]\d{3}((0\d)|(1[0-2]))(([0|1|2]\d)|3[0-1])((\d{4})|\d{3}[Xx])$)$/.test(str);
+        }
+        // console.log(isIdCard('340323199409103356'))
+        // 判断是否为电话号码
+        function isPhone(str){
+            return /^(0|86|17951)?(13[0-9]|15[012356789]|17[678]|18[0-9]|14[57])[0-9]{8}$/.test(str)
+        }
+        // 判断是否为URL地址
+        function isURL(str){
+            return /[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/i.test(str);
+        }
+        // console.log(isURL('http://blog.csdn.net/VhWfR2u02Q/article/details/78993079'))
+        // 现金额转大写
+        function digitUppercase(n){
+            var fraction = ['角','分'];
+            var digit = [
+                '零','壹','贰','参','肆',
+                '伍','陆','柒','捌','玖'
+            ];
+
+            var unit = [
+                ['元','万','亿'],
+                ['', '拾', '佰', '仟']
+            ];
+            var head = n<0?'欠':'';
+            n = Math.abs(n);
+            var s = '';
+            for(var i=0;i<fraction.length;i++){
+                s+=(digit[Math.floor(n*10*Math.pow(10,i)) % 10]+fraction[i]).replace(/零./,'');
+            }
+            s = s || '整';
+            n = Math.floor(n);
+            for(var i=0;i<unit[0].length && n>0;i++){
+                var p = '';
+                for(var j=0;j<unit[1].length && n>0;j++){
+                    p = digit[n%10]+unit[1][j]+p;
+                    n = Math.floor(n/10);
+                }
+                s = p.replace(/(零.)*零$/, '').replace(/^$/, '零')+unit[0][i]+s;
+            }
+            return head + s.replace(/(零.)*零元/, '元')
+            .replace(/(零.)+/g, '零')
+            .replace(/^整$/, '零元整');
+        }
+        console.log(digitUppercase(1020.5))
+
+        // 格式化startTime距现在的已过时间
+        // console.log(new Date().getTime())
+        // console.log(Date.parse(new Date()))
+        function formatPassTime(startTime){
+            var currentTime = Date.parse(new Date());
+                time = currentTime - startTime,
+                day = parseInt(time/(24*60*60*1000)),
+                hour  = parseInt(time/(1000*60*60)),
+                min = parseInt(time/(1000*60)),
+                month = parseInt(day/30),
+                year = parseInt(month/12);
+
+            if(year) return year + '年前'
+            if(month) return month + '个月前'
+            if(day) return day + '天前'
+            if(hour) return hour + '小时前'
+            if(min) return min + '分钟前'
+            else return '刚刚'
+        }
+        // 获取某一时刻的毫秒数
+        var start = Date.parse(new Date('2018/03/06 11:50:21'));
+        console.log(start)
+        console.log(formatPassTime(start))
+        // 格式化现在距离endTime的时间
+        function formatRemainTime(endTime){
+            var startDate = new Date();
+            var endDate = new Date(endTime);
+            var t = endDate.getTime() - startDate.getTime();
+            var d = 0,
+            h=0,
+            m=0,
+            s=0;
+            if(t>=0){
+                d = Math.floor(t/1000/3600/24);
+                h = Math.floor(t/1000/60/60);
+                m = Math.floor(t/1000/60);
+                s = Math.floor(t/1000);
+            }
+            return d+'天'+h+'小时'+m+'分钟'+s+'秒';
+        }
+        var time = new Date('2018/10/01')
+
+        console.log(formatRemainTime(time));
+
+        // url参数转对象
+        function parseQueryString(url){
+            url = url == null?window.location.href:url;
+            var search = url.substring(url.lastIndexOf('?')+1);
+            if(!search){
+                return {}
+            }
+            return JSON.parse('{"'+ decodeURIComponent(search).replace(/"/g, '\\"').replace(/&/g, '","').replace(/=/g, '":"') + '"}')
+        }
+
+        // console.log(parseQueryString(''))
+        // 对象序列化
+    var obj = {
+        name:'jack',
+        age:20,
+        sex:true
+    }
+    console.log(obj)
+    console.log(JSON.stringify(obj))
+    
+    // 判断滚动条是否滚动到底部
+    $(window).scroll(function(){
+        var scrollTop = $(this).scrollTop();
+        var docHeight = $(document).height();
+        var windowHeight = $(this).height();
+        var scrollHeight = document.body.scrollHeight;
+        console.log(screenTop);
+        if(scrollTop+windowHeight == docHeight){
+            alert('已经到底部了')
+        }
+    })
+    // 返回顶部函数
+    $(window).scroll(function(){
+        var a = $(this).scrollTop();
+        if(a>100){
+            $('.go-top').fadeIn();
+        }else{
+            $('.go-top').fadeOut();
+        }
+    })
+    $('.go-top').click(function(){
+        $('html,body').animate({scrollTop:"0px"},'100')
+    })
+    </script>
+</body>
+
+</html>

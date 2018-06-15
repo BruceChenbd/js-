@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title></title>
+    <style type="text/css">
+     	.hide{
+     		display: none;
+     	}
+     	.subBorder {
+            position: fixed;
+            left: 50%;
+            right: 50%;
+            width: 400px;
+            height: 200px;
+            margin: 0 auto;
+            background: #999999;
+        }
+         #dialog form {
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+ <!-- 点击左侧菜单实现打开和关闭 -->
+ <div>
+ 	<div class="first">菜单一</div>
+ 	<div class="content hide">
+ 		<div>one</div>
+ 		<div>two</div>
+ 		<div>three</div>
+ 	</div>
+ </div>
+
+ <div>
+ 	<div class="first">菜单二</div>
+ 	<div class="content hide">
+ 		<div>one</div>
+ 		<div>two</div>
+ 		<div>three</div>
+ 	</div>
+ </div>
+
+ <div>
+ 	<div class="first">菜单三</div>
+ 	<div class="content hide">
+ 		<div>one</div>
+ 		<div>two</div>
+ 		<div>three</div>
+ 	</div>
+ </div>
+ <hr>
+ <!-- 实现全选反选取消功能 -->
+
+ <input type="button" name="" value="全选" onclick="checkAll()">
+ <input type="button" name="" value="反选" onclick="checkBack()">
+ <input type="button" name="" value="取消" onclick="checkCancel()">
+
+ <table border="2">
+ 	<thead></thead>
+ 	<tbody id="tb1">
+ 		<tr>
+ 			<th>选择</th>
+            <th>主机名</th>
+            <th>ip地址</th>
+            <th>端口号</th>
+ 		</tr>
+ 		<tr>
+ 			<td><input type="checkbox" name=""></td>
+ 			<td>mysql-001</td>
+ 			<td>10.10.0.10</td>
+ 			<td>15379</td>
+ 		</tr>
+		<tr>
+            <td><input type="checkbox" /></td>
+            <td>redis-001</td>
+            <td>10.10.9.10</td>
+            <td>16379</td>
+        </tr>
+
+        <tr>
+            <td><input type="checkbox" /></td>
+            <td>monitor-001</td>
+            <td>10.10.10.10</td>
+            <td>17379</td>
+        </tr>
+ 	</tbody>
+ </table>
+ <hr>
+ <table  border="2">
+        <thead></thead>
+        <tbody>
+            <tr>
+                <td>mysql-001</td>
+                <td>10.10.8.10</td>
+                <td>15379</td>
+                <td onclick="GetPrev(this);">编辑</td>
+            </tr>
+
+            <tr>
+                <td>redis-001</td>
+                <td>10.10.9.10</td>
+                <td>16379</td>
+                <td onclick="GetPrev(this);">编辑</td>
+            </tr>
+
+            <tr>
+                <td>monitor-001</td>
+                <td>10.10.10.10</td>
+                <td>17379</td>
+                <td onclick="GetPrev(this);">编辑</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <div id="dialog" class="subBorder hide">
+        <form action="" method="get">
+            <p>主机名：<input type="text" id="hostname"/></p>
+            <p>ip地址：<input type="text" id="ip" /></p>
+            <p>端口号：<input type="text" id="port"/></p>
+            <input type="submit" onclick="return SubmitForm();" value="确认"/>
+            <input type="button" onclick="Cancel();" value="取消"/>
+        </form>
+    </div>
+ <script type="text/javascript" src="https://cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
+ <script type="text/javascript">
+ 	var arr = $('.first');
+ 	arr.each(function(){
+ 		$(this).click(function(){
+ 			$(this).siblings().removeClass('hide').toggle()
+ 		})
+ 	})
+ 	$('.content').children().mouseenter(function(){
+ 		$(this).css({"background":"gray"})
+ 	}).mouseleave(function(){
+ 		$(this).css({"background":"none"})
+ 	})
+// 全选
+ 	function checkAll(){
+ 		$('#tb1').find(':checkbox').prop('checked',true);
+ 	}
+ 	// 反选
+ 	function checkBack(){
+ 		$('#tb1').find(':checkbox').each(function(){
+ 			if($(this).prop('checked')){
+ 				$(this).prop('checked',false)
+ 			}else{
+ 				$(this).prop('checked',true)
+ 			}
+ 		})
+ 	}
+ 	// 取消
+ 	function checkCancel(){
+ 		$('#tb1').find(':checkbox').prop('checked',false)
+ 	}
+
+ 	function GetPrev(getvalue){
+    var list = [];
+    $.each($(getvalue).prevAll(),function(i){
+        var item = $(getvalue).prevAll()[i];
+        var text = $(item).text();
+        list.push(text);
+    });
+
+    var new_list = list.reverse();
+    //在弹出框的hostname中设置值
+    $("#hostname").val(new_list[0]);
+    $("#ip").val(new_list[1]);
+    $("#port").val(new_list[2]);
+    $("#dialog").removeClass("hide");
+
+}
+
+function Cancel(){
+     $("#dialog").addClass("hide");
+}
+
+function SubmitForm(){
+    //获取表单中的input值，并在判断值是否为空
+    var ret=true;
+    //遍历所有的input，只要值为空，就将ret设置为false
+    //$("input[type='text']") <==> $(':text')
+    $(':text').each(function(){
+        //$(this) 等于要循环的每一个元素
+        var value=$(this).val();
+        if (value.trim().length==0){ //判断长度是否为0. 或判断是否为空：<==> if (value.itrm()=="") //trim: 去除空格
+            $(this).css('border-color','red'); //设置边框为红色（意思是：如果用户输入为空，则边框显示红色警示）
+            ret=false //设置false
+        }else{
+            $(this).css('border-color','green') //当输入不为空时，提交时将所有不为空的元素边框设置为绿色
+        }
+    });
+    return ret;
+}
+ </script>
+</body>
+</html>

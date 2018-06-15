@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>获取url中的参数</title>
+</head>
+<body>
+    <script>
+       function getUrlParam(sUrl,sKey){
+           var obj = {};
+           var index = sUrl.indexOf('?');
+           //url中没有带参数
+           if(index==-1){
+               if(sKey == undefined){
+                   return obj;
+               }else{
+                   return "";
+               }
+           }
+
+           var queryString = (sUrl.split('?')[1]).split('#')[0];
+           console.log(queryString)
+           var query = queryString.split('&'); // 分离出了所有参数
+
+           for(var i=0;i<query.length;i++){
+               var keyValue = query[i].split('=');
+               var key = keyValue[0];
+               var value = keyValue[1];
+
+               if(value == ""){
+                   continue;//value值为空，进行下一次循环
+               }
+               if(obj.hasOwnProperty(key)){
+                   if(Array.isArray(obj[key])){//判断是不是数组
+                        obj[key].push(value);
+                   }else{
+                       //不是数组
+                       var val = obj[key];
+                       obj[key] = [];
+                       obj[key].push(val);
+                       obj[key].push(value);
+                   }
+               }else{
+                   //有新参数，直接添加
+                   obj[key] = value;
+               }
+           }
+           //指定参数名的，返回该参数的值或空
+           if(sKey){
+               return obj[sKey]?obj[sKey]:"";
+           }else{
+               return obj;
+           }
+       }
+       console.log(NaN == NaN)
+       console.log(getUrlParam('https://www.nowcoder.com/practice/a3ded747e3884a3c86d09d88d1652e10?tpId=2&tqId=10852&tPage=1&rp=1&ru=%2Fta%2Ffront-end&qru=%2Fta%2Ffront-end%2Fquestion-ranking'))
+    </script>
+</body>
+</html>

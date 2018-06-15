@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>解构赋值</title>
+</head>
+<body>
+    <script>
+        // let a = 1;
+        // let b = 2;
+        // let c = 3;
+        // let [a,b,c] = [1,2,3];
+        // console.log(a,b,c); // 1,2,3
+
+        // 本质上，只要模式匹配，左边的变量就会被赋予对应的值
+        // let [foo,[[bar],baz]] = [1,[[2],3]];
+        // console.log(foo,bar,baz) // 1,2,3
+
+        // let [ , ,third] = ['foo','bar','baz'];
+        // console.log(third) // baz
+        // let [x,y,...z] = ['a'];
+        // console.log(x,y,z) // 解构不成功就返回undefined a,undefined,[]
+        // 对象的解构赋值
+        // let {foo,bar} = {foo:'aaa',bar:'bbb'};
+        // console.log(foo,bar) // aaa,bbb
+        
+
+        // 对象的解构与数组不同，数组的元素是按次序排列的，变量的取值由它的位置决定；但是对象的属性没有次序，变量名
+        // 必须与属性同名，才能取到正确的值。
+        // let {baz} = {foo:'aaa',bar:'bbb'};
+        // console.log(baz) // undefined
+
+        // 如果变量名与属性名不一致，必须携程下面这样
+        // let {foo:baz} = {foo:'aaa',bar:'bbb'};console.log(baz) //aaa
+        // let obj = {first:'hello',last:'world'};
+        // let {first:f,last:l} = obj;
+        // console.log(f,l) // hello world
+
+        // 嵌套结构的对象
+        // let obj = {
+        //     p:[
+        //         'hello',
+        //         {y:'world'}
+        //     ]
+        // };
+
+        // let {p:[x,{y}]} = obj;
+        // console.log(x,y) // hello world
+
+        //  值得注意的是此时的p是模式，不是变量，因此不会被赋值，如果p也要作为变量赋值，可以写成如下格式
+        // let obj = {
+        //     p:[
+        //         'hello',
+        //         {y:'world'}
+        //     ]
+        // };
+        // let {p,p:[x,{y}]} = obj;
+        // console.log(x,y,p) // hello world ['hello',{y:'world'}]
+
+        // const node = {
+        //     loc:{
+        //         start:{
+        //             line:1,
+        //             column:5
+        //         }
+        //     }
+        // }
+
+        // let {loc,loc:{start},loc:{start:{line}}} = node;
+        // console.log(line,loc,start) //1, {start:{line:1,column:5}},start:{line:1,column:5}
+
+        // 字符串的解构赋值
+        // const [a,b,c,d,e] = 'hello';
+        // console.log(a,b,c,d,e) //h e l l o
+
+        // 数值和布尔值得解构赋值
+        // 解构赋值时，如果等号右边是数值和布尔值，则会先转为对象
+        // let {toString:s} = 123;
+        // console.log(s === Number.prototype.toString)
+
+        // let{toString:s} = true;
+        // console.log(s === Boolean.prototype.toString)
+
+        // undefined和null无法转为对象，所以对他们进行结构赋值，都会报错
+        // let {prop:x} = undefined; // typeError
+        // let {prop:y} = null; // typeError
+
+        // [[1,2],[3,4]].map(([a,b]) =>console.log(a,b,a+b))
+    </script>
+</body>
+</html>
