@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>js原型链理解</title>
+</head>
+
+<body>
+    <script>
+        // js中对象分为两类：普通对象object和函数对象function
+        // 所有的构建函数如Function Object Number都是函数对象
+        console.log(typeof Object) //function
+        console.log(typeof Function) //function
+        console.log(typeof Number) //function
+            // 所有的这些构建函数使用new或者直接调用的方式都能构建出一个新的数据类型。但是构建出来是有区别的。
+        var o = new Object();
+        o1 = Object();
+        console.log(o == o1); //false
+        console.log(o === o1); //false
+
+        var f = new Function(),
+            f1 = Function();
+        console.log(f == f1); //false
+        console.log(f === f1); //false
+
+        var a = new Array(),
+            a1 = Array();
+        console.log(a == a1); //false
+        console.log(a === a1); //false
+
+        var n = new Number(),
+            n1 = Number();
+        console.log(n == n1); //true
+        console.log(n === n1); //false
+
+        var s = new String(),
+            s1 = String();
+        console.log(s == s1); //true
+        console.log(s === s1); //false
+
+        var b = new Boolean(),
+            b1 = Boolean();
+        console.log(b == b1); //true
+        console.log(b === b1); //false
+
+
+        // Object/Function/Array的对比结果都好说，因为他们构建出来的都是新对象，对象的比较是要比较根源的（数据是否为同一个）。
+        // 无论是使用new还是直接调用生成一个新的对象都是要开辟新的存储，不会和任何一个对象相等
+        // 对于数值类型 == 比较的是值相等 === 除了比较值以外还要比较数据类型
+
+        console.log(new Number()) //[[PrimitiveValue]]:0
+        console.log(new Boolean()) //[[PrimitiveValue]]:false
+        console.log(new String()) //[[PrimitiveValue]]:""
+            // 这三者在比较的时候PrimitiveValue对象被当作数值类型来比较。当使用===的时候比较数值相等再比较数据类型
+
+
+        // 普通对象没有prototype属性，只有_proto_隐藏属性，函数对象两者兼有，prototype属性指向函数的原型对象，
+        // 对象的__proto__属性是创建实例对象的时候对应的函数对象的原型对象。
+
+        // 函数的原型对象实质上是在函数创建的时候，创建了一个它的实例对象并且赋值给他的prototye
+        var temp = new Function();
+        Function.prototype = temp;
+
+        // 所有函数对象的原型对象都继承原始对象，即fn.prototype._proto_为原始对象，但是比较特别的是Object函数，他的原型对象就是原始对象，即Object.prototye。
+
+        // 实际上js是没有继承的，但是_proto_起到了类似继承的作用。我们所知的对象起源都是一个空对象，我们把这个空对象称作原始对象，所有的对象通过_proto_
+        // 回溯到这个原始对象(所谓的指向类似C中的指针，这个原始对象是唯一的，整个内存中只会存在一个原始对象),例如：
+        var obj = new Object();
+        console.log('-----------')
+        console.log(obj.__proto__) //Object{}
+        console.log(obj.prototype) //undefined
+        console.log(Object.prototype) //Object{}
+        console.log(Object.__proto__) //function
+        console.log(Object.__proto__.__proto__) //Object
+
+        var f = new Function();
+        f.__proto__; //function(){}
+        f.prototype; //Object {}
+        Function.prototype; //function(){}
+        Function.__proto__; //function(){}
+        Function.__proto__.__proto__; //Object {}
+
+        // js中对象分为两种，普通对象和函数对象，凡是通过new Function()创建的对象都是函数对象，
+        // 其他的都是普通对象
+
+        // 实例的构造函数属性(constructor)指向构造函数
+        // 在js中，每当定义一个对象的时候，对象中都会包含一些预定义的属性。其中每个函数对象
+        // 都有一个prototype属性，这个属性指向函数的原型对象。
+
+        // 原型对象    A.prototype
+        // 在默认情况下，所有的原型对象都会自动获得一个constructor（构造函数）属性
+        // 这个属性是一个指针，指向prototype属性所在的函数A.prototype.constructor == A
+        // 原型对象是构造函数的一饿实例
+    </script>
+</body>
+
+</html>
