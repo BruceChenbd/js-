@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Vue原理总结</title>
+</head>
+<body>
+    <p>1.什么是MVVM？</p>
+    <p>
+        MvvM是一种设计思想，是Model，View，ViewModel的缩写。Model代表数据模型，也可以在Model中定义数据修改和操作的业务逻辑。View代表的是UI组件，<br>
+        它负责将数据模型转化成UI展现出来，ViewModel是一个同步View和Model的对象。
+    </p>
+    <p>
+        在MVVM架构下，View和Model之间并没有直接的联系，而是通过ViewModel进行交互，Model和ViewModel之间的交互式双向的，<br>
+        因此View数据变化会同步到Model中，而Model数据的变化也会立即反应到View上。
+    </p>
+    <p>2.MvvM和MVC的区别？</p>
+    <p>mvc中的controller演变成mvvm中的viewModel。mvvm主要解决了mvc中大量的DOM操作使页面渲染性能降低，加载速度变慢，影响用户体验</p>
+    <p>vue数据驱动，通过数据来显示视图层而不是节点操作。</p>
+    <p>3.vue的优点是什么？</p>
+    <p>
+        (1).低耦合。视图（View）可以独立于Model变化和修改，一个ViewModel可以绑定到不同的"View"上，
+        当View变化的时候Model可以不变，当Model变化的时候View也可以不变。
+    </p>
+    <p>
+        (2).可重用性。你可以把一些视图逻辑放在一个ViewModel里面，让很多view重用这段视图逻辑。
+    </p>
+    <p>
+        (3).独立开发。开发人员可以专注业务逻辑和数据的开发(ViewModel),设计人员可以专注于页面设计。
+    </p>
+    <p>
+        (4).可测试。界面素来是比较难于测试的，而现在测试可以针对ViewModel来写。
+    </p>
+    <p>4.组件之间的传值？</p>
+    <p>
+        (1). 父组件向子组件传递数据。在Vue中，可以使用props向子组件传递数据。<br>
+        (2). 子组件向父组件传递数据。使用$emit传递。<br>
+        (3). 非父子组件之间的传值。创建事件总线，作为通信桥梁，在需要传值的组件中用bus.$emit触发一个自定义事件，在需要接收数据的组件中用bus.$on监听自定义事件。
+    </p>
+    <p>
+        5.生命周期相关？
+    </p>
+    <p>
+        (1). 创建前后：在beforeCreate阶段，vue实例的挂载元素el和数据对象data都为undefined，还未初始化。在created阶段，vue实例的数据对象data有了，el还没有。
+    </p>
+    <p>
+        (2). 载入前后：在beforeMount阶段，vue实例的$el和data都初始化了，但还是挂载之前为虚拟的dom节点，data.message还未替换。在mounted阶段，vue实例挂载完成，data.message成功渲染。
+    </p>
+    <p>
+        (3). 更新前后：当data变化时，会触发beforeUpdate和updated方法。
+    </p>
+    <p>
+        (4). 销毁前后：在执行destroy方法后，对data的改变不会触发周期函数，说明此时vue实例已经解除了事件监听以及和dom的绑定，但是dom结构依然存在
+    </p>
+    <p>
+        6.简述每个周期具体适合哪些场景？
+    </p>
+    <p>
+        beforecreate : 可以在这加个loading事件，在加载实例时触发
+        created : 初始化完成时的事件写在这里，如在这结束loading事件，异步请求也适宜在这里调用
+        mounted : 挂载元素，获取到DOM节点
+        updated : 如果对数据统一处理，在这里写上相应函数
+        beforeDestroy : 可以做一个确认停止事件的确认框
+        nextTick : 更新数据后立即操作dom
+    </p>
+</body>
+</html>

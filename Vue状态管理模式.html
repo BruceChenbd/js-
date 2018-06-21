@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Vue状态管理模式</title>
+</head>
+<body>
+      <script>
+        //   Vuex是一个专门Vue.js应用程序开发的状态管理模式。它采用集中式存储管理应用的所有组件的状态，并以相应的规则保证状态
+        //   以一种可预测的方式发生变化
+        //   事实上vuex就是把需要共享的变量全部存储在一个对象里面，然后将这个对象放在顶层组件中供其他组件使用。
+        //   vuex包含有五个基本的对象：
+        //   state: 存储状态。也就是变量；
+        //   getters: 派生状态。相当于store的计算属性。
+        //   mutations:提交状态修改。也就是set，get中的set，这是vuex中唯一修改state的方式，但不支持异步操作。第一个参数默认是state。外部调用方式
+        //   store.commit('SET_AGE',18).和vue中的methods类似。
+        //   actions：和mutations类似。不过actions支持异步操作。第一个参数默认是和store具有相同参数属性的对象。
+        //   modules：store的子模块，内容就相当于是store的一个实例。调用方式和前面介绍的相似，
+
+        // vue-cli中使用vuex的方式
+        // 一般来讲，我们都会采用vue-cli来进行实际的开发，在vue-cli中，开发和调试方式稍微不同
+        // ├── index.html
+        // ├── main.js
+        // ├── components
+        // └── store
+        //     ├── index.js          # 我们组装模块并导出 store 的地方
+        //     ├── state.js          # 跟级别的 state
+        //     ├── getters.js        # 跟级别的 getter
+        //     ├── mutation-types.js # 根级别的mutations名称（官方推荐mutions方法名使用大写）
+        //     ├── mutations.js      # 根级别的 mutation
+        //     ├── actions.js        # 根级别的 action
+        //     └── modules
+        //         ├── m1.js         # 模块1
+        //         └── m2.js         # 模块2
+        // state.js示例：
+        const state = {
+            name:'weish',
+            age:22
+        };
+        export default state;
+
+        // getters.js示例
+        export  const name = (state)=>{
+            return state.name;
+        }
+        export const age = (state)=>{
+            return state.age;
+        }
+        export const other = (state)=>{
+            return `My name is ${state.name},I am ${state.age}`;
+        }
+
+        // mutation-type.js示例（我们会将所有的mutations的函数名放在这个文件里）：
+        export const SET_NAME = 'SET_NAME';
+        export const SET_AGE = 'SET_AGE';
+
+        // mutations.js示例：
+        import *as types from './mutation-type.js';
+        export default {
+            [types.SET_NAME](state, name) {
+                state.name = name;
+            },
+            [types.SET_AGE](state, age) {
+                state.age = age;
+            }
+         };
+
+        //  actions.js示例
+        import * as types from './mutation-type.js';
+
+        export default {
+            nameAsyn({commit}, {age, name}) {
+                commit(types.SET_NAME, name);
+                commit(types.SET_AGE, age);
+            }
+        };
+
+        // modules--m1.js示例（如果不是很复杂的应用，一般来讲是不会分模块的）：
+
+        export default {
+            state: {},
+            getters: {},
+            mutations: {},
+            actions: {}
+        };
+
+        // index.js示例（组装vuex）：
+        import vue from 'vue';
+        import vuex from 'vuex';
+        import state from './state.js';
+        import * as getters from './getters.js';
+        import mutations from './mutations.js';
+        import actions from './actions.js';
+        import m1 from './modules/m1.js';
+        import m2 from './modules/m2.js';
+        import createLogger from 'vuex/dist/logger'; // 修改日志
+
+        vue.use(vuex);
+
+        const debug = process.env.NODE_ENV !== 'production'; // 开发环境中为true，否则为false
+
+        export default new vuex.Store({
+            state,
+            getters,
+            mutations,
+            actions,
+            modules: {
+                m1,
+                m2
+            },
+            plugins: debug ? [createLogger()] : [] // 开发环境下显示vuex的状态修改
+        });
+
+        // 最后将store实例挂载到main.js里面的vue上去就行了
+        import store from './store/index.js';
+
+        new Vue({
+        el: '#app',
+        store,
+        render: h => h(App)
+        });
+
+        // 在vue组件中使用时，我们通常会使用mapGetters、mapActions、mapMutations，
+        // 然后就可以按照vue调用methods和computed的方式去调用这些变量或函数，示例如下：
+        import {mapGetters, mapMutations, mapActions} from 'vuex';
+
+        export default {
+        computed: {
+            ...mapGetters([
+                name,
+                age
+            ])
+        },
+        methods: {
+            ...mapMutations({
+                setName: 'SET_NAME',
+                setAge: 'SET_AGE'
+            }),
+            ...mapActions([
+                nameAsyn
+            ])
+        }
+    };
+      </script>
+</body>
+</html>
