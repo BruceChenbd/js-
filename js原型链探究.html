@@ -94,6 +94,40 @@
         // 在默认情况下，所有的原型对象都会自动获得一个constructor（构造函数）属性
         // 这个属性是一个指针，指向prototype属性所在的函数A.prototype.constructor == A
         // 原型对象是构造函数的一饿实例
+        function Person(name, age) {
+ 
+        this.name = name;
+
+        this.age = age;
+
+        this.sayName = function() {
+
+            alert(this.name);
+
+        }
+
+        }
+
+        function createPerson(P) {
+        
+        alert(arguments[0])
+        
+        var o = new Object();
+
+        var args = Array.prototype.slice.call(arguments, 1);//转化成真的数组
+
+        o.__proto__ = P.prototype;
+
+        P.prototype.constructor = P;
+
+        P.apply(o, args);
+
+        return o;
+
+        }
+
+        console.log(createPerson(Person))
+        console.log(new Person())
     </script>
 </body>
 
