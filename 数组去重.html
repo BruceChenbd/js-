@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>数组去重</title>
+</head>
+
+<body>
+    <div id="mydiv">
+        <input type="button" value="click" id="mybtn">
+    </div>
+    <script>
+        var arr = [0, '0', 10, 10, null, undefined, null, 'hello', 8];
+        // Set去重
+        // let uniq = [...new Set(arr)];
+        // console.log(uniq)
+
+        //遍历去重
+        // let unique = arr => {
+        //         let newA = [];
+        //         arr.forEach((key) => {
+        //             if (newA.indexOf(key) < 0) {
+        //                 newA.push(key)
+        //             }
+        //         })
+        //         return newA;
+        //     }
+        // console.log(unique(arr))
+
+        //添加原型方法
+        // Array.prototype.unique = function() {
+        //     var obj = {};
+        //     var arr = [];
+        //     for (var i = 0; i < this.length; i++) {
+        //         if (arr.indexOf(this[i]) < 0) {
+        //             arr.push(this[i])
+        //         }
+        //     }
+        //     return arr;
+        // }
+
+        // console.log(arr.unique())
+
+        //将数组的值放在一个对象的属性名里，并且给属性赋值
+        // let a = ['1', '2', '3', 1, NaN, NaN, undefined, undefined, null, null, 'a', 'b', 'b'];
+        // const unique = arr => {
+        //     var obj = {}
+        //     arr.forEach(value => {
+        //         obj[value] = 0; //这步新添加一个属性，并赋值，如果不赋值的话，属性会添加不上去
+        //     })
+        //     return Object.keys(obj); //`Object.keys(对象)`返回这个对象可枚举属性组成的数组，这个数组就是去重后的数组
+        // }
+        // console.log(unique(a)); //["1", "2", "3", "NaN", "undefined", "null", "a", "b"]
+
+        // var btn = document.getElementById('mybtn');
+        // btn.onclick = function() {
+
+        //     document.getElementById('mydiv').innerHTML = '.....'
+        // }
+    </script>
+</body>
+
+</html>

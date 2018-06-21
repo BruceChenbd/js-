@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>jquery链式操作</title>
+</head>
+
+<body>
+    <script>
+        function Jq() {
+
+        }
+        Jq.prototype = {
+            setName: function(name) {
+                console.log(this)
+                console.log('this的指向') //Jq()
+                this.name = name;
+                console.log(this)
+                console.log('-----')
+                return this;
+            },
+            setAge: function(age) {
+                this.age = age;
+                return this
+            },
+            getName: function() {
+                return this.name;
+            }
+        }
+        var jq = new Jq()
+        console.log(jq)
+        jq.setName('宝东').setAge(18).getName()
+        console.log(jq.getName())
+    </script>
+</body>
+
+</html>

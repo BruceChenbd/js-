@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>实现继承</title>
+</head>
+
+<body>
+    <script>
+        //1.原型链继承
+        // function person(name, age) {
+        //     this.name = name;
+        //     this.age = age;
+        // }
+
+        // person.prototype.say = function() {
+        //     console.log(this.name + '是大帅哥')
+        // }
+        // var p = new person('宝东', 18);
+        // p.say()
+
+        // function girl(name) {
+        //     this.name = name;
+        // }
+        // girl.prototype = new person();
+        // var g = new girl('小美');
+        // g.say()
+
+        //2.call()和apply()方法构造函数继承
+        // function Father(name) {
+        //     this.name = name;
+        //     this.say = function() {
+        //         alert(name + '是你的爸爸')
+        //     }
+        // }
+
+        // function Child(name) {
+        //     var args = arguments;
+        //     Father.call(this, args[0]);
+        //     // Father.apply(this,arguments);
+        // }
+        // var F = new Father('宝东');
+        // F.say();
+        // var C = new Child('宝哥哥');
+        // C.say()
+    </script>
+</body>
+
+</html>
