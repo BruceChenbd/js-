@@ -1,60 +1,124 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Promise理解</title>
+    <script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
 </head>
+
 <body>
     <h1>
-        在javascript的世界中，所有的代码都是单线程的。<br>
-        promise是异步编程的一种解决方案，有三种状态pending-进行中<br>
-        resolve-已完成，reject已失败。
+        在javascript的世界中，所有的代码都是单线程的。<br> promise是异步编程的一种解决方案，有三种状态pending-进行中
+        <br> resolve-已完成，reject已失败。
     </h1>
     <img src="" alt="">
     <script>
-       var imgs = [
-           'https://ss2.bdstatic.com/70cFvnSh_Q1YnxGkpoWK1HF6hhy/it/u=930030583,3103007713&fm=27&gp=0.jpg',
-           'https://ss1.bdstatic.com/70cFvXSh_Q1YnxGkpoWK1HF6hhy/it/u=2294814182,4087227957&fm=27&gp=0.jpg',
-           'https://ss3.bdstatic.com/70cFv8Sh_Q1YnxGkpoWK1HF6hhy/it/u=2805162462,2114044915&fm=27&gp=0.jpg',
-           'https://ss1.bdstatic.com/70cFuXSh_Q1YnxGkpoWK1HF6hhy/it/u=2785201253,2868769744&fm=27&gp=0.jpg',
-       ];
-       function PreLoad(source){
-           var pr = [];//promise实例数组
-           source.forEach((item)=>{
-               let p = LoadImage(item).then(img=>{
-                   console.log(img)
-                document.body.appendChild(img)
-               }).catch(err=>{
-                   console.log(err)
-               })
-               pr.push(p);
-           })
-           Promise.all(pr).then(()=>{
-               alert('加载完毕啦')
-           })
-       }
-       function LoadImage(url){
-           return  new Promise(function(resolve,reject){
-               const image = new Image(100,100);
-               image.onload = function(){
-                   resolve(image);
-               }
-               image.onerror = function(){
-                   reject(new Error('error'))
-               }
-               image.src = url;
-           })
-       }
-    //   LoadImage('http://img1.imgtn.bdimg.com/it/u=290502501,1013331448&fm=27&gp=0.jpg').then(function(data){
-    //       console.log(data)
-    //   }).catch(function(){
-    //       alert('加载失败')
-    //   })
-       PreLoad(imgs)
+        var imgs = [
+            'https://ss2.bdstatic.com/70cFvnSh_Q1YnxGkpoWK1HF6hhy/it/u=930030583,3103007713&fm=27&gp=0.jpg',
+            'https://ss1.bdstatic.com/70cFvXSh_Q1YnxGkpoWK1HF6hhy/it/u=2294814182,4087227957&fm=27&gp=0.jpg',
+            'https://ss3.bdstatic.com/70cFv8Sh_Q1YnxGkpoWK1HF6hhy/it/u=2805162462,2114044915&fm=27&gp=0.jpg',
+            'https://ss1.bdstatic.com/70cFuXSh_Q1YnxGkpoWK1HF6hhy/it/u=2785201253,2868769744&fm=27&gp=0.jpg',
+        ];
 
-      
+        function PreLoad(source) {
+            var pr = []; //promise实例数组
+            source.forEach((item) => {
+                let p = LoadImage(item).then(img => {
+                    console.log(img)
+                    document.body.appendChild(img)
+                }).catch(err => {
+                    console.log(err)
+                })
+                pr.push(p);
+            })
+            Promise.all(pr).then(() => {
+                alert('加载完毕啦')
+            })
+        }
+
+        function LoadImage(url) {
+            return new Promise(function(resolve, reject) {
+                const image = new Image(100, 100);
+                image.onload = function() {
+                    resolve(image);
+                }
+                image.onerror = function() {
+                    reject(new Error('error'))
+                }
+                image.src = url;
+            })
+        }
+        //   LoadImage('http://img1.imgtn.bdimg.com/it/u=290502501,1013331448&fm=27&gp=0.jpg').then(function(data){
+        //       console.log(data)
+        //   }).catch(function(){
+        //       alert('加载失败')
+        //   })
+        // PreLoad(imgs)
+
+        function Ajax(url, data) {
+            return new Promise((resolve, reject) => {
+                var ajaxTimeOut = $.ajax({
+                    type: 'post',
+                    url: url,
+                    data: data,
+                    dataType: 'json',
+                    timeout: 1000,
+                    cache: false,
+                    async: true,
+                    beforeSend: function(XMLhttpRequest) {
+                        console.log('发送前')
+                        console.log(XMLHttpRequest);
+                        console.log(this)
+                    },
+                    success: function(data, status) {
+                        console.log('成功后')
+                        console.log(data);
+                        console.log(status);
+                        console.log(this)
+                        resolve(data, this)
+                    },
+                    complete: function(XMLHttpRequest, textStatus) {
+                        console.log('完成后');
+                        console.log(XMLHttpRequest);
+                        console.log(textStatus)
+                        if (textStatus == 'timeout') {
+                            ajaxTimeOut.abort(); //取消请求
+                            alert('网络超时！')
+                        }
+                    },
+                    error: function(XMLHttpRequest, textStatus, errorThrown) {
+                        console.log('失败后')
+                        console.log(XMLHttpRequest);
+                        console.log(textStatus);
+                        console.log(errorThrown);
+                        reject(errorThrown, this)
+                    }
+
+                })
+            })
+        }
+        var p = new Ajax('http://api.jisuapi.com/recipe/class', {
+            appkey: 'd437f2408ec177ca'
+        })
+        p.then((res) => {
+            console.log('第一个请求')
+            console.log(res)
+            return Ajax('http://api.jisuapi.com/recipe/byclass', {
+                appkey: 'd437f2408ec177ca',
+                classid: 2,
+                start: 0,
+                num: 10
+            })
+        }).then(res => {
+            console.log('第二个请求');
+            console.log(res)
+        }).catch((err) => {
+            console.log(err)
+        })
     </script>
 </body>
+
 </html>
