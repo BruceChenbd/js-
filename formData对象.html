@@ -8,16 +8,16 @@
 </head>
 <body>
     <script>
-    //    var fd = new FormData();
-    //    fd.append('userName','baoge');
-    //    fd.append('age',18);
-    //    fd.append('height',180);
+       var fd = new FormData();
+       fd.append('userName','baoge');
+       fd.append('age',18);
+       fd.append('height',180);
 
-    //   alert(fd.has('age'))
+      alert(fd.has('age'))
 
-    //   for(var key of fd.keys()){
-    //      console.log(key)
-    //   }
+      for(var key of fd.keys()){
+         console.log(key)
+      }
     //   var a = 4;
      
     //   function b(x,y,a){
@@ -31,16 +31,16 @@
     //    console.log(a) //undefined;
 
     // function fun(n,o){
-    //     console.log(o);
+    //     console.log(o);//undefined
     //     return function (m){
     //         return fun (m,n);
     //     }
     // }
     // const a = fun(0);
-    // // console.log(a);
-    // a(1);
-    // a(2);
-    // a(3);
+    // console.log(a);
+    // a(1);//0
+    // a(2);//0
+    // a(3);//0
     // var arr = [0,1,0,10,false,false,true,null,undefined,true,null]
     // // 数组去重ES5
     // Array.prototype.uniq = function(){
