@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>降频函数</title>
+    <style>
+    p{
+        height: 10000px;
+    }
+    </style>
+</head>
+<body>
+    <p id="app">hello</p>
+    <input type="radio" name="1">1<input type="radio" name="1">2
+    <!-- <script>
+    //  降频函数
+    function debounce(func,wait,immediate){
+        var timeout;
+        return function(){
+            var context = this,
+            args = arguments;
+            var later = function(){
+                timeout = null;
+                if(!immediate) func.apply(context,args);
+            };
+            var callNow = immediate&&!timeout;
+            clearTimeout(timeout);
+            timeout = setTimeout(later,wait);
+            if(callNow) func.apply(context,args);
+        };
+    };
+    // 禁止重复调用，只允许执行一次
+    function once(fn,context){
+        var result;
+        return function(){
+            if(fn){
+                result = fn.apply(context || this,arguments);
+                fn = null;
+            }
+            return result;
+        }
+    }
+   
+
+    function getAbsoluteUrl(url){
+         return function(url){
+            return function(url){
+            if(!a) a = document.createElement('a');
+            a.href = url;
+
+            return a.href;
+         }
+    }
+    }
+
+    var ary = [12,23,24,42,15];
+    // var res = ary.forEach(function(item,index,input){
+    //       console.log(this)
+    //       input[index] = item*10;
+    // })
+    // console.log(res);//undefined;
+    // console.log(ary)// [120,230,240,420,150]
+
+    // var res = ary.map(function (item,index,input) {
+    //  return item*10;
+    // })
+
+    // console.log(res);//[120,230,240,420,150]
+    // console.log(ary)//[12,23,24,42,15]
+
+    // forEach和map在IE6-8下都不兼容，封装兼容写法
+    Array.prototype.myForEach = function(callback,context){
+        context = context||window;
+        if('forEach' in Array.prototype){
+            this.forEach(callback,context);
+            return;
+        }
+         //IE6-8下自己编写回调函数执行的逻辑
+        for(var i=0,len=this.length;i<len;i++){
+            callback&&callback.call(context,this[i],i,this);
+        }
+    }
+    // ary.myForEach(function(item,index,input){
+    //     console.log(index)
+    //      input[index] = item*10
+    // })
+    // console.log(ary)
+
+    Array.prototype.myMap = function myMap(callback,context){
+    context = context || window;
+    if('map' in Array.prototype) {
+        return this.map(callback,context);
+    }
+    //IE6-8下自己编写回调函数执行的逻辑
+    var newAry = [];
+    for(var i = 0,len = this.length; i < len;i++) {
+        if(typeof  callback === 'function') {
+            var val = callback.call(context,this[i],i,this);
+            newAry[newAry.length] = val;
+        }
+    }
+    return newAry;
+    }
+
+    var res = ary.myMap(function(item,index,input){
+       return item*10
+    })
+    console.log(ary)
+    console.log(res)
+
+
+    
+    </script> -->
+   <script src='//kefu.easemob.com/webim/easemob.js?configId=b67ba3a2-5d09-4085-8150-9c9124c953ac'></script>
+</body>
+</html>
