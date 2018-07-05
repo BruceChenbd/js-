@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>函数调用与this</title>
+</head>
+
+<body>
+    ·
+    <script>
+        // 1.函数调用，此时this是全局的也就是windows
+        var c = function() {
+            alert(this == window)
+        }
+        c() //true
+
+        // 2.方法调用
+        var myObj = {
+            value: 2,
+            inc: function(num) {
+                alert(this.value + num);
+            }
+        }
+        myObj.inc(1);
+        //内部匿名函数不属于当前对象的函数，因此this指向了全局对象window
+        var obj1 = {
+            name: '宝哥',
+            value: 0,
+            increment: function(num) {
+                this.value += typeof(num) === 'number' ? num : 0;
+            },
+            toString: function() {
+                return '[onject:' + this.name + '{value:' + this.value + '}]';
+            },
+            getInfo: function() {
+                return (function() {
+                    return this.toString(); //内部匿名函数不属于当前对象的函数，因此this指向了全局对象window
+                })()
+            }
+        }
+        alert(obj1.getInfo()); //[object window]
+        // 解决that = this
+        var obj2 = {
+            name: '宝哥',
+            value: 0,
+            increment: function(num) {
+                this.value += typeof(num) === 'number' ? num : 0;
+            },
+            toString: function() {
+                return '[onject:' + this.name + '{value:' + this.value + '}]';
+            },
+            getInfo: function() {
+                var that = this; //把当前this指向保存起来
+                return (function() {
+                    return that.toString();
+                })();
+            }
+        }
+        alert(obj2.getInfo()); //[onject:宝哥{value:0}]
+        // 3.用new关键字来新建一个函数对象的调用，this指向被绑定到构造函数的实例上
+        function Person(name) {
+            this.name = name;
+
+        }
+        Person.prototype.getName = function() {
+            return this.name;
+        }
+        var p = new Person('宝哥');
+        console.log(p.getName())
+
+        // call和apply
+    </script>
+</body>
+
+
+</html>

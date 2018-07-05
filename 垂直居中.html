@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>css垂直居中</title>
+    <style>
+        /* #wrapper {
+            width: 500px;
+            height: 500px;
+            background: gray;
+        }
+        
+        #wrapper p {
+            line-height: 500px;
+            text-align: center;
+        } */
+        /* 适用于单行文本 */
+        /* #wrapper {
+            position: relative;
+            width: 500px;
+            height: 500px;
+            background: gray;
+        }
+        
+        #wrapper p {
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            height: 300px;
+            width: 300px;
+            margin-left: -150px;
+            margin-top: -150px;
+        } */
+        /* 已知高度的块级元素 父元素设置relative，子元素设置absolute，高，宽50%；margin-left，margin-top为宽高的一般*/
+        /* #wrapper {
+            display: table;
+            background: gray;
+            width: 500px;
+            height: 500px;
+            text-align: center;
+        }
+        
+        #wrapper p {
+            display: table-cell;
+            vertical-align: middle;
+        } */
+        /* 不知道子元素 父元素高度的情况 */
+        
+        #wrapper {
+            position: relative;
+            background: gray;
+            width: 800px;
+            height: 800px;
+        }
+        
+        #content {
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            margin: auto;
+        }
+        /* 绝对定位居中 */
+    </style>
+</head>
+
+<body>
+    <div id="wrapper">
+        <img id="content" src="http://img1.imgtn.bdimg.com/it/u=4073425408,760969153&fm=27&gp=0.jpg" alt="">
+    </div>
+</body>
+
+</html>
