@@ -1,0 +1,38 @@
+<div class="container">
+    <h2 class="page-title">产品列表</h2>
+
+    <div class="searchbar">
+        <ul class="entity-tabular-fields">
+            <li>
+                <label>搜索：</label>
+                <span class="field-control">
+                    <input type="text" ng-model="filter.productName" value=" " />
+                </span>
+                <label></label>
+            </li>
+        </ul>
+    </div>
+
+    <h2><a href="#/ProductEdit">新增产品</a></h2>
+
+    <table class="items-listing">
+        <thead>
+            <tr>
+                <th>代码</th>
+                <th>名称</th>
+                <th>描述</th>
+                <th>类别</th>
+                <th>操作</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr ng-repeat="product in products|filter:filter.productName">
+                <td><a href="#/ProductEdit?code={{product.code}}">{{product.code}}</a></td>
+                <td>{{product.name}}</td>
+                <td>{{product.description}}</td>
+                <td>{{product.category}}</td>
+                <td><a href="#/?code={{product.code}}">删除</a></td>
+            </tr>
+        </tbody>
+    </table>
+</div>

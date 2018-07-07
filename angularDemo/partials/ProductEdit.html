@@ -1,0 +1,40 @@
+<div class="container">
+    <h2 class="page-title">产品编辑</h2>
+    <br/>
+
+    <ul class="entity-tabular-fields">
+        <li class="entity-field-row">
+            <label>产品代码：</label>
+            <span class="field-control">
+                <input type="text" ng-model="currentProduct.code"/>
+                <label></label>
+            </span>
+        </li>
+        <li class="entity-field-row">
+            <label>产品名称：</label>
+            <span class="field-control">
+                <input type="text" ng-model="currentProduct.name" />
+                <label></label>
+            </span>
+        </li>
+        <li class="entity-field-row">
+            <label>产品描述：</label>
+            <span class="field-control">
+                <input type="text" ng-model="currentProduct.description"/>
+            </span>
+            <label></label>
+        </li>
+        <li class="entity-field-row">
+            <label>产品种类：</label>
+            <span class="field-control">
+                <input type="text" ng-model="currentProduct.category"/>
+            </span>
+            <label></label>
+        </li>
+        <li class="entity-field-row">
+            <span class="field-control">
+                <button ng-click="saveProduct()">保存</button>
+            </span>
+        </li>
+    </ul>
+</div>
