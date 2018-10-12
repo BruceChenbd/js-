@@ -60,6 +60,33 @@
 
         //     document.getElementById('mydiv').innerHTML = '.....'
         // }
+        //对象数组去重
+        let hash = {};
+        let config = [{
+                name: '陈宝东',
+                id: 1
+            }, {
+                name: '刘德华',
+                id: 2,
+            }, {
+                name: '周星驰',
+                id: 3
+            }, {
+                name: '周星驰',
+                id: 3
+            }, {
+                name: '陈宝东',
+                id: 1
+            }]
+            // config = [...config, {
+            //     name: '陈宝东',
+            //     id: 3
+            // }]
+        const newArr = config.reduceRight((item, next) => {
+            hash[next.name] ? '' : hash[next.name] = true && item.push(next);
+            return item
+        }, []);
+        console.log(newArr);
     </script>
 </body>
 

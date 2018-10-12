@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>let与var的区别</title>
+    <style>
+        .test {
+            width: 100px;
+            height: 100px;
+            background: red;
+            padding: 10px;
+            border: 1px solid blue;
+            margin: 10px;
+            box-sizing: border-box;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="test">
+
+    </div>
+    <script>
+        // let是更完美的var，不是全局变量，
+        // 具有块级函数作用域,大多数情况不会发生变量提升。
+        // const定义常量值，不能够重新赋值，如果值是一个对象，
+        // 可以改变对象里边的属性值。
+        // 1.let声明的变量具有块级作用域
+        // 2.let声明的变量不能通过window.变量名进行访问。
+        // 3.形如for(let x..)的循环是每次迭代都为x创建新的绑定
+
+        // 例如:
+        var arr = [];
+        for (var i = 0; i < 10; i++) {
+            arr[i] = function() {
+                console.log(i)
+            }
+        }
+        console.log(i, 'i')
+        arr[5]() //10
+            // 原因：变量i是var声明的，在全局范围内都有效
+            // 所以用来计数的循环变量泄露为全局变量。每一次循环新的i会覆盖旧的i，最终导致输出10;
+        var arr1 = [];
+        for (let i = 0; i < 10; i++) {
+            arr1[i] = function() {
+                console.log(i)
+            }
+        }
+        arr1[5]() //5
+
+        // 面试题：把一下代码使用两种方法，依次输出0-9
+        // var funcs = [];
+        // for (var i = 0; i < 10; i++) {
+        //     funcs.push(function() {
+        //         console.log(i)
+        //     })
+        // }
+        // funcs.forEach(function(func) {
+        //         func();十个10
+        //     })
+        // console.log(funcs)
+        // 方法1：立即执行函数
+        // var funcs = [];
+        // for (var i = 0; i < 10; i++) {
+        //     funcs.push((function() {
+        //         console.log(i)
+        //     })(i))
+        // }
+        // funcs.forEach(function(func) {
+        //     func();//0-9
+        // })
+        // 方法2：闭包
+        // function show(i) {
+        //     return function() {
+        //         console.log(i)
+        //     }
+        // }
+        // var funcs = [];
+        // for (var i = 0; i < 10; i++) {
+        //     funcs.push(show(i))
+        // }
+        // funcs.forEach(function(func) {
+        //     func();
+        // })
+        // 方法3：let
+        // var funcs = []
+        // for (let i = 0; i < 10; i++) {
+        // funcs.push(function () {
+        //     console.log(i)
+        // })
+        // }
+        // funcs.forEach(function (func) {
+        // func(); //依次输出0-9
+        // })
+
+        //模板字符串
+        const name = 'jack';
+        const sex = 'girl';
+        const age = 18;
+        console.log(`hello ${name} is a ${sex},and already ${age}`)
+        var html = `
+         <div>
+            <h1>我是模板字符串</h1>
+         </div>
+        `;
+        document.write(html);
+
+        let a = Math.ceil(Math.random() * 10);
+        console.log(a);
+        let promise = new Promise((resolve, reject) => {
+            if (a > 5) {
+                resolve(console.log('success'))
+            } else {
+                reject(console.log('default'))
+            }
+        });
+        promise.then(() => {
+            alert(666)
+        }).catch(() => {
+            alert('服务器相应失败')
+        })
+
+        setTimeout(function() {
+            console.log(1)
+        }, 0);
+        new Promise(function executor(resolve) {
+            console.log(2);
+            for (var i = 0; i < 10000; i++) {
+                i == 9999 && resolve();
+            }
+            console.log(3);
+        }).then(function() {
+            console.log(4);
+        });
+        console.log(5);
+        let arr6 = [{
+                name: '张三',
+                id: 1
+            }, {
+                name: '李四',
+                id: 2
+            }, {
+                name: '张三',
+                id: 3
+            }, {
+                name: '刘德华',
+                id: 4
+            }, {
+                name: '刘德华',
+                id: 5
+            }]
+            // let obj = {};
+            // const unique = arr6.reduce((item, next) => {
+            //     // console.log(next)
+            //     obj[next.name] ? '' : obj[next.name] = true && item.push(next);
+            //     return item;
+            // }, [])
+            // console.log(unique)
+        let obj = {};
+        let arr8 = [];
+        for (var i = 0; i < arr6.length; i++) {
+            if (!obj[arr6[i].name]) {
+                arr8.push(arr6[i]);
+                obj[arr6[i].nameq] = true;
+            }
+        }
+        console.log(arr8)
+        console.log(obj)
+    </script>
+</body>
+
+</html>

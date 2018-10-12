@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>es6this指向</title>
+</head>
+
+<body>
+    <script>
+        class Animal {
+            constructor() {
+                this.type = 'animal';
+            }
+
+            say(val) {
+                setTimeout(function() {
+                    console.log(this);
+                    console.log(this.type + 'say' + ':' + val);
+                }, 1000)
+            }
+        }
+        var animal = new Animal();
+        animal.say('hello');
+
+        function Test(name, sex) {
+            this.name = name;
+            this.sex = sex;
+            this.say = () => {
+                console.log(this.name + '是帅哥');
+                console.log(this) //Test
+            }
+            setTimeout(() => {
+                    console.log(this) //Test
+                }, 1000) //超时调用的代码都是在全局作用域中执行的，因此，函数中的this在非严格模式下都是指向windows，在严格模式下是undefined
+        }
+
+        var t = new Test('宝哥', '男');
+        t.say();
+    </script>
+</body>
+
+</html>

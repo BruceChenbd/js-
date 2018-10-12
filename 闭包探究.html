@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>闭包</title>
+</head>
+
+<body>
+    <script>
+        //js中 函数内部可以直接读取全局变量，但是在函数外部无法读取函数内部的局部变量。
+        var a = 'outer';
+
+        function show() {
+            var b = 'inner'
+            console.log(a)
+        }
+        show() //outer
+            // console.log(b) //b is not defined
+
+        function show1() {
+            var b = 'inner'
+            console.log(a)
+            return function f() { //闭包
+                console.log(b)
+            }
+        }
+        show1()()
+
+        function test() {
+            var arr = [];
+            for (var i = 0; i < 10; i++) {
+                (function(j) {
+                    arr.push(function() { //
+                        console.log(j)
+                    })
+                })(i)
+            }
+            return arr
+        }
+        // 立即执行函数
+        // (function(j) {
+        //             arr.push(function() {
+        //                 console.log(j)
+        //             })
+        //  })(i)
+        console.log(test());
+        var myarr = test();
+        for (var j = 0; j < myarr.length; j++) {
+            myarr[j]()
+        }
+    </script>
+</body>
+
+</html>

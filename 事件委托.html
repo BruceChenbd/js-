@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>事件委托</title>
+    <style>
+        ul {
+            margin: 0;
+            padding: 0;
+        }
+        
+        li {
+            width: 100px;
+            text-align: center;
+            background: lightgreen;
+            border-radius: 5px;
+            margin-bottom: 5px;
+        }
+    </style>
+</head>
+
+<body>
+    <ul>
+        <li>1</li>
+        <li>2</li>
+        <li>3</li>
+        <li>4</li>
+        <li>5</li>
+        <li>6</li>
+    </ul>
+</body>
+<script>
+    //目的：点击每一个li，实现，点机当前这个li，弹出里面的数字。
+    //   方法1:每个li添加点击事件
+    const ul = document.getElementsByTagName('ul')[0];
+    const li = ul.getElementsByTagName('li');
+    console.log(li);
+    // for (let i = 0; i < li.length; i++) {
+    //     li[i].onclick = function() {
+    //         alert(this.innerHTML)
+    //     }
+    // }
+    // 方法2：给父元素添加一个点击事件，利用事件冒泡原理实现事件委托
+    ul.onclick = function(e) {
+        var e = e || window.e;
+        var target = e.target || e.srcElement;
+        alert(e.target.innerHTML)
+
+    }
+</script>
+
+</html>
